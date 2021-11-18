@@ -234,7 +234,7 @@ def main():
         should_save = should_save or t == params.num_iterations
 
         should_save_frame = params.save_video and t % params.save_video_iter == 0
-        should_save_frame = should_save or t == params.num_iterations
+        should_save_frame = should_save_frame or t == params.num_iterations
         if should_save or should_save_frame:
             disp = deprocess(img.clone())
 
