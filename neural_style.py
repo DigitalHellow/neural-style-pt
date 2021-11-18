@@ -1,5 +1,7 @@
 import os
 import copy
+import imageio
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -29,6 +31,11 @@ parser.add_argument("-init_image", default=None)
 parser.add_argument("-optimizer", choices=['lbfgs', 'adam'], default='lbfgs')
 parser.add_argument("-learning_rate", type=float, default=1e0)
 parser.add_argument("-lbfgs_num_correction", type=int, default=100)
+
+# Video Output
+parser.add_argument("-save_video", type=int, choices=[0, 1], default=0)
+parser.add_argument("-save_video_iter", type=int, default=5)
+parser.add_argument("-fps", type=int, default=24)
 
 # Output options
 parser.add_argument("-print_iter", type=int, default=50)
@@ -217,19 +224,29 @@ def main():
     def maybe_save(t):
         should_save = params.save_iter > 0 and t % params.save_iter == 0
         should_save = should_save or t == params.num_iterations
+
+        should_save_frame = params.save_video and t % params.save_video_iter == 0
+        should_save_frame = should_save or t == param.num_iterations
+        if should_save or should_save_frame:
+            disp = deprocess(img.clone())
+
         if should_save:
             output_filename, file_extension = os.path.splitext(params.output_image)
             if t == params.num_iterations:
                 filename = output_filename + str(file_extension)
             else:
                 filename = str(output_filename) + "_" + str(t) + str(file_extension)
-            disp = deprocess(img.clone())
 
             # Maybe perform postprocessing for color-independent style transfer
             if params.original_colors == 1:
                 disp = original_colors(deprocess(content_image.clone()), disp)
 
             disp.save(str(filename))
+
+        if should_save_frame:
+            with imageio.get_writer('output.mp4', fps=params.fps) as writer:
+                writer.append_data(imageio.imread(disp))
+
 
     # Function to evaluate loss and gradient. We run the net forward and
     # backward to get the gradient, and sum up losses from the loss modules.
