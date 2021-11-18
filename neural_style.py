@@ -229,6 +229,7 @@ def main():
                 print("  Style " + str(i+1) + " loss: " + str(loss_module.loss.item()))
             print("  Total loss: " + str(loss.item()))
 
+
     def maybe_save(t):
         should_save = params.save_iter > 0 and t % params.save_iter == 0
         should_save = should_save or t == params.num_iterations
@@ -252,7 +253,17 @@ def main():
             disp.save(str(filename))
 
         if should_save_frame:
+            frames = []
+            if os.path.isfile('output.mp4'):
+                with imageio.get_reader('output.mp4', fps=20) as reader:
+                    frames = list(reader)
             with imageio.get_writer('output.mp4', fps=params.fps) as writer:
+                for frame in frames:
+                    writer.append_data(frame)
+                if frames:
+                    size = frames[0].shape[:-1]
+                    disp = disp.resize(size, Image.ANTIALIAS)
+                
                 writer.append_data(np.array(disp))
 
 
