@@ -245,7 +245,7 @@ def main():
 
         if should_save_frame:
             with imageio.get_writer('output.mp4', fps=params.fps) as writer:
-                writer.append_data(imageio.imread(disp))
+                writer.append_data(disp)
 
 
     # Function to evaluate loss and gradient. We run the net forward and
