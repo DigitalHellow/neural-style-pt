@@ -1,6 +1,7 @@
 import os
 import copy
 import imageio
+import numpy as np
 
 import torch
 import torch.nn as nn
@@ -188,6 +189,13 @@ def main():
     for i in style_losses:
         i.mode = 'loss'
 
+    # Maybe delete video file if it already exists
+    if params.save_video:
+        try:
+            os.remove("output.mp4")
+        except Exception as e:
+            print(e)
+
     # Maybe normalize content and style weights
     if params.normalize_weights:
         normalize_weights(content_losses, style_losses)
@@ -245,7 +253,7 @@ def main():
 
         if should_save_frame:
             with imageio.get_writer('output.mp4', fps=params.fps) as writer:
-                writer.append_data(disp)
+                writer.append_data(np.array(disp))
 
 
     # Function to evaluate loss and gradient. We run the net forward and
