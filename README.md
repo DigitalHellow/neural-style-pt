@@ -200,7 +200,11 @@ path or a full absolute path.
 **Output options**:
 * `-output_image`: Name of the output image. Default is `out.png`.
 * `-print_iter`: Print progress every `print_iter` iterations. Set to 0 to disable printing.
-* `-save_iter`: Save the image every `save_iter` iterations. Set to 0 to disable saving intermediate results.
+* `-save_iter`: Save the image every `save_iter` iterations. Set to 0 to disable saving intermediate.
+* `-save_video`: Create a video of the training process `save_video` iterations. Set to 1 to enable. 
+* `-save_video_iter`: Add a frame to the video every `save_video_iter` iterations.
+* `-fps`: Video fps 
+results.
 
 **Layer options**:
 * `-content_layers`: Comma-separated list of layer names to use for content reconstruction.

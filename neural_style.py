@@ -255,7 +255,7 @@ def main():
         if should_save_frame:
             frames = []
             if os.path.isfile('output.mp4'):
-                with imageio.get_reader('output.mp4', fps=20) as reader:
+                with imageio.get_reader('output.mp4', fps=params.fps) as reader:
                     frames = list(reader)
             with imageio.get_writer('output.mp4', fps=params.fps) as writer:
                 for frame in frames:
