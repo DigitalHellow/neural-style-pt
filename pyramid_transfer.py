@@ -25,8 +25,14 @@ def main(target_path: str, style_pth: str, image_size: int,
 
     target_img = load_image(target_path, size=image_size)
 
-    high_features, low_features = laplace_pyramid.pyramid_down(
+    _, low_features = laplace_pyramid.pyramid_down(
         style_transform(style_img), 3)
+    
+    high_features, _ = laplace_pyramid.pyramid_down(
+        style_transform(target_img), 3)
+    
+    for i in range(len(high_features)):
+        high_features[i] = high_features[i].to(device)
 
     target_img_t = style_transform(target_img)[None, ...]
     print(target_img_t.size())
