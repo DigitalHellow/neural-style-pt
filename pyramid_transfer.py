@@ -25,10 +25,10 @@ def main(target_path: str, style_pth: str, image_size: int,
 
     target_img = load_image(target_path, size=image_size)
 
-    _, low_features = laplace_pyramid.pyramid_down(
+    low_features, _ = laplace_pyramid.pyramid_down(
         style_transform(style_img), 3)
     
-    high_features, _ = laplace_pyramid.pyramid_down(
+    _, high_features = laplace_pyramid.pyramid_down(
         style_transform(target_img), 3)
     
     for i in range(len(high_features)):
