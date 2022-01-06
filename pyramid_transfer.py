@@ -52,7 +52,7 @@ def main(target_path: str, style_pth: str, image_size: int,
         for i in range(iter_n):
             opt.zero_grad()
             synth_img = transformer(target_img_t)
-            synth_highf, synth_lowf = laplace_pyramid.pyramid_down(
+            synth_lowf, synth_highf = laplace_pyramid.pyramid_down(
                 synth_img, 3)
             
             target_loss = target_weight * mse_loss(
